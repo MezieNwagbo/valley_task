@@ -29,15 +29,15 @@ const MessageContainer = () => {
           <Skeleton className="h-4 w-32" />
           <Skeleton className="h-8 w-60 rounded-md" />
         </div>
-        {[...Array(2)].map((_, idx) => (
+        {[...Array(1)].map((_, idx) => (
           <MessageSkeleton key={idx} />
         ))}
       </>
     );
 
   return (
-    <>
-      <div className="flex items-center justify-between py-5">
+    <div className="pb-40">
+      <div className="flex items-center justify-between py-5 ">
         <span className="text-sm font-medium text-gray-400">
           Version {selectedVersion} - {data?.label}
         </span>
@@ -138,7 +138,7 @@ const MessageContainer = () => {
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 
