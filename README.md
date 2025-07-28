@@ -1,103 +1,105 @@
-# FE Valley Task
+# Valley Task — Messages & AI Training UI
 
-Built with React, TypeScript, Tailwind CSS, and ShadCN/UI (Radix-based), this UI emphasizes clarity, reusability, and developer efficiency.
+This project implements a modern and dynamic UI for a "Messages" and "AI Training" dashboard screen. It is built with **React**, **TypeScript**, **Tailwind CSS**, and **shadcn/ui**, emphasizing modularity, accessibility, and performance.
 
-## Technical Approach & Architectural Decisions
+## Architectural Decisions and Tradeoffs
 
-- Given the time constraint, I focused on delivering a solid layout and reusable and extendible components
-- I used mock apis to demonstrate how dynamic data would be handled on the ui and how the user would interact with it
-- The focus was not on pixel perfectness but engineering and functionality
+- The application was built with clarity, maintainability, and modularity in mind.
 
----
+- Focus was on scalability and clean separation of concerns, allowing each feature (Messages, AI Training) to evolve independently.
 
-## Component Structure
+- Componentization was prioritized to promote reusability and readability, even at the cost of slightly increased boilerplate.
 
-### 📨 Messages UI
+- While attention was paid to UI accuracy, pixel-perfection was not the focus — the emphasis was on delivering engineering clarity and dynamic functionality under a strict time constraint.
 
-- **`Messages.tsx`**
-  - Wraps the message view and sticky input bar
-- **`MessageContainer.tsx`**
-  - Responsible for displaying a stream of messages
-- **`ChatInput.tsx`**
-  - Handles multi-line input and dynamic icon
-- **`SelectionTag.tsx`**
-  - Reusable badge-style toggles (e.g., Regenerate, Prompt)
+## 🗂 Component Structure
 
-### 🧠 AI Training UI
+The project follows a modular, feature-based folder structure that supports scalability, clarity, and developer productivity. Components are grouped by feature domain and type, promoting separation of concerns and easier navigation.
 
-- **`FilterBar.tsx`**
-  - Combines tabs and multi-select filters for scoped control
-- **`DropdownMultiSelect.tsx`**
-  - Custom dropdown with search and checkbox support
-- **`DropdownCustom.tsx`**
-  - Badge-style trigger supporting icon + label + chevron
-- **`OverviewTab.tsx`**
-  - Tab switcher using ShadCN `Tabs` for high-level view toggling
+```
+src/
+├── api/                          # API abstraction layer
+├── assets/                       # (For icons, images, etc.)
+├── components/
+│   ├── overview/                 # Feature-specific screens
+│   │   ├── aiTraining/
+│   │   │   ├── AITraing.tsx
+│   │   │   ├── FilterBar.tsx
+│   │   │   ├── TrainingNotification.tsx
+│   │   │   └── TrainingNotificationSkeleton.tsx
+│   │   ├── messages/
+│   │   │   ├── MessageContainer.tsx
+│   │   │   ├── MessageInputSection.tsx
+│   │   │   ├── Messages.tsx
+│   │   │   └── MessageSkeleton.tsx
+│   │   ├── research/
+│   │   │   └── Research.tsx
+│   │   ├── ChatInput.tsx
+│   │   └── OverviewTab.tsx
+│   ├── ui/                       # Custom UI wrappers
+│   │   ├── BadgeCustom.tsx
+│   │   ├── ButtonCustom.tsx
+│   │   ├── DropdownCustom.tsx
+│   │   ├── DropdownMultiselect.tsx
+│   │   ├── EmptyData.tsx
+│   │   ├── MenuBar.tsx
+│   │   ├── Overview.tsx
+│   │   ├── PaginationBar.tsx
+│   │   └── SelectionTag.tsx
+│   └── userDetails/
+├── config/
+│   ├── dropdownMenuData.ts
+│   ├── paginationData.ts
+│   └── tabMenuData.ts
+├── layout/
+│   └── Layout.tsx
+├── pages/
+│   └── MainPage.tsx
+├── utils/
+│   └── utils.tsx
+└── App.tsx
+```
 
-### Shared Utilities
+### Why This Structure?
 
-- **`config/`**
-  - Includes reusable constants (e.g., `writingStyleOptions`, `tabMenu`)
-- **`components/ui/`**
-  - ShadCN-generated UI primitives (DropdownMenu, Button, Tabs, etc.)
+- **Feature-oriented**: Encourages scaling without clutter. Each feature (e.g., Messages, AI Training) is self-contained and easily testable.
+- **Reusable UI primitives**: Shared UI components are centralized for consistency and easier updates.
+- **Clear separation of concerns**: Logic (API, config), layout, and presentation are kept cleanly distinct.
+- **Scalable for teams**: Easy for multiple engineers to work in parallel without stepping on each other’s toes.
 
----
+## Assumptions & Edge Case Handling
 
-## ✅ Assumptions & Edge Case Handling
+- **Empty States**: Handled using `<EmptyData />` for both messages and training sections.
+- **Skeleton Loaders**: Ensures visual feedback during API loading.
+- **Missing Data**: Fallbacks are implemented for optional fields like `icon`, `avatar`, `subtext`, etc.
+- **No Results After Filtering**: A `"No matches found"` state is shown when dropdown search yields nothing.
 
-| Assumption                                 | Handling                                                                |
-| ------------------------------------------ | ----------------------------------------------------------------------- |
-| Message input is dynamic and not hardcoded | Built `ChatInput` as controlled form field with optional icon           |
-| Filters may grow in number                 | Added searchable `DropdownMultiSelect` with virtualization-ready layout |
-| Filter counts may vary                     | Added support for item count display (`Category (N)`)                   |
-| No match in dropdown                       | Gracefully shows a "No matches found" state                             |
-| Message count or tag actions might grow    | `SelectionTag` and `BadgeCustom` are flexible and slot-based            |
+## Accessibility Considerations
 
----
+- All interactive elements (e.g., dropdowns, checkboxes, buttons) follow `shadcn/ui` accessibility standards.
+- Keyboard navigation works as expected in dropdowns and accordions.
+- Icons used from `lucide-react` are decorational unless explicitly labeled for screen readers.
+- Input placeholders and focus states are visually and semantically clear.
 
-## ♿ Accessibility Considerations
+## Performance Considerations
 
-- Used Radix primitives (via ShadCN) which are:
-  - Fully keyboard-navigable
-  - ARIA-compliant out of the box
-- Visual indicators (e.g., active tab states, selected checkboxes)
-- Semantic HTML with `<button>`, `<label>`, `<input>`, and `aria-*` attributes provided by Radix
+- **useMemo** used to memoize filtered dropdown items and prevent unnecessary re-renders.
+- **Used TanStack Query**: All data fetching is handled with TanStack Query to ensure efficient caching, background updates, and request deduplication.
+- Lightweight component trees split into feature domains (e.g., `aiTraining`, `messages`) for better tree shaking and lazy loading potential.
+- Skeleton loading ensures perceived performance doesn't drop on network delays.
 
----
+## Refactoring Opportunities (with more time)
 
-## 🚀 Performance Considerations
+- **Global State Management**: Introduce a state management library (e.g., Zustand or Redux Toolkit) for shared tab/filter state instead of prop drilling.
+- **Pagination Hook Abstraction**: Reuse pagination logic across multiple components by abstracting it into a `usePagination()` hook.
+- **Styling fixes for better UX**: For example, making the main tab (OverviewTab) fixed so it remains visible on scroll, improving navigation across long content.
+- **Decouple tightly coupled components**: Some components could benefit from further decoupling for more seperation of concerns
+- **Enhanced Responsiveness**: Improve mobile responsiveness.
+- **User details**: Build out the User details view.
 
-- **Memoized filtering** in dropdowns using `useMemo`
-- Dropdown checkboxes are rendered conditionally to avoid unnecessary DOM updates
-- All components are functionally stateless unless controlled externally
-- Styling is Tailwind-based (JIT), eliminating runtime CSS parsing
+## 🚀 Run Locally
 
----
-
-## 🛠 What I'd Refactor with More Time
-
-| Area             | Improvement                                                                                                            |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| State Management | Move to a lightweight store (e.g., Zustand or Jotai) for global UI state sharing (e.g., selected filters, current tab) |
-| Animations       | Add subtle `framer-motion` transitions to dropdowns and tags for a smoother UX                                         |
-| Message Flow     | Convert message rendering into a timeline-style system with better date-grouping                                       |
-| Testing          | Add unit tests for dropdown filter logic, keyboard accessibility, and tab behavior                                     |
-| Virtualization   | If dropdown options become large (100+), add `react-virtual` to optimize rendering                                     |
-
-Build out user details
-
----
-
-## 🧪 Stack Summary
-
-- **Framework**: React + TypeScript
-- **Styling**: Tailwind CSS
-- **Component Library**: ShadCN/UI
-- **Icons**: Lucide React
-- **Tooling**: Vite, Copilot
-
----
-
-## 💬 Final Thoughts
-
-This UI was built with speed, scalability, and real-world use cases in mind (e.g., messaging, filtering, AI-driven workflows). The architecture is flexible enough to support deeper features like conversation history, training progress, or prompt management with minimal refactor.
+```bash
+npm install
+npm run dev
+```
