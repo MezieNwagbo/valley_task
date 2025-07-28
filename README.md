@@ -12,7 +12,7 @@ This project implements a modern and dynamic UI for a "Messages" and "AI Trainin
 
 - While attention was paid to UI accuracy, pixel-perfection was not the focus — the emphasis was on delivering engineering clarity and dynamic functionality under a strict time constraint.
 
-## 🗂 Component Structure
+## Component Structure
 
 The project follows a modular, feature-based folder structure that supports scalability, clarity, and developer productivity. Components are grouped by feature domain and type, promoting separation of concerns and easier navigation.
 
@@ -97,7 +97,7 @@ src/
 - **Enhanced Responsiveness**: Improve mobile responsiveness.
 - **User details**: Build out the User details view.
 
-## 🚀 Run Locally
+## Run Locally
 
 ```bash
 npm install
